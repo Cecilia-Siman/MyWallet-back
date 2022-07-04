@@ -42,6 +42,6 @@ export async function postRegister(req, res) {
     }
     else{
         res.status(422).send(valid.error);
-        console.log(valid.error);
+        //console.log(valid.error);
     }
 }

@@ -1,10 +1,8 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import joi from 'joi';
-import bcrypt from 'bcrypt';
 
-import router from './src/routes/routes.js'
+import router from './src/routes/routes.js';
 
 const server = express();
 server.use(cors());

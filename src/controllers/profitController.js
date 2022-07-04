@@ -1,10 +1,9 @@
-import bcrypt from 'bcrypt';
 import joi from 'joi';
 import { MongoClient } from "mongodb";
 import dotenv from "dotenv";
 import express from "express";
 import cors from "cors";
-import { v4 as uuid } from 'uuid';
+import dayjs from 'dayjs';
 
 const server = express();
 server.use(cors());
@@ -26,23 +25,23 @@ export async function postProfit(req, res) {
     })
 
     const valid = userSchema.validate(req.body);
-    //token do header
 
+    const token = req.headers.token;
     const userSession = await db.collection("sessions").findOne({token});
-    if(userSession && valid) {
-        
-        await db.collection("sessions").insertOne({
-            userId: user._id,
-            token
-        })
-        const resObj = {
-            name: user.name,
-            token
+
+    if(userSession && !valid.error) {
+        const newExp = {
+            id: userSession._id,
+            amount: req.body.amount,
+            type: 'profit',
+            description: req.body.description,
+            date: dayjs().format('DD/MM'), 
         }
-        res.status(201).send(resObj);
+        await db.collection("expenses").insertOne(newExp);
+        res.status(201).send(newExp);
     }
     else{
         res.status(422).send();
-        console.log("deu erro");
+        //console.log(valid);
     }
 }
