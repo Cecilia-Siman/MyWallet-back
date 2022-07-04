@@ -36,6 +36,7 @@ export async function postLoss(req, res) {
             type: 'loss',
             description: req.body.description,
             date: dayjs().format('DD/MM'), 
+            email: userSession.email
         }
         await db.collection("expenses").insertOne(newExp);
         res.status(201).send(newExp);
