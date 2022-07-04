@@ -38,10 +38,10 @@ export async function postRegister(req, res) {
         };
 
         await db.collection("users").insertOne(newUser);
-        res.status(201).send();
+        res.status(201).send(valid.error);
     }
     else{
         res.status(422).send(valid.error);
-        //console.log(valid.error);
+        console.log(valid.error);
     }
 }

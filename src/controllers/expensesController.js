@@ -22,7 +22,7 @@ export async function getExpenses(req, res) {
     const userSession = await db.collection("sessions").findOne({token});
 
     if(userSession) {
-        const expenses = await db.collection("expenses").find({id:userSession.id}).toArray();
+        const expenses = await db.collection("expenses").find({email:userSession.email}).toArray();
         res.status(201).send(expenses);
         console.log(expenses);
     }

@@ -20,19 +20,14 @@ mongoClient.connect().then(() => {
 
 
 export async function postLogin(req, res) {
-    /*const userSchema = joi.object({
-        email: joi.string().required().email(),
-        password: joi.string().required().pattern(/[a-zA-Z0-9]{6,}/)
-    });*/
-
-    //const valid = userSchema.validate(req.body);
     const user = await db.collection("users").findOne({email: req.body.email});
     if(user && bcrypt.compareSync(req.body.password, user.password)) {
         const token = uuid();
         
         await db.collection("sessions").insertOne({
             userId: user._id,
-            token
+            token,
+            email: req.body.email,
         })
         const resObj = {
             name: user.name,
@@ -41,7 +36,7 @@ export async function postLogin(req, res) {
         res.status(201).send(resObj);
     }
     else{
-        res.status(422).send();
+        res.status(422).send(user);
         console.log("deu erro");
     }
 }
